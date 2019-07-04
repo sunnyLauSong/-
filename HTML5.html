@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+    </head>
+    
+    <body>
+
+        <!--画板-->
+        <canvas style="background-color:antiquewhite;width:400px;height:300px;border:5px dotted">
+            看不见我啊
+        </canvas>
+
+        <!--输入列表-->
+        <form method="POST" action="#" style="display:block;width:300px;margin:30px auto">
+            <input list="companys" type="text" id="search"><button>搜索</button>
+            <datalist id="companys">
+                <option value="百度">
+                <option value="腾讯">
+                <option value="阿里">
+                <option value="阿里bba">   
+                <option value="a">
+            </datalist>
+        </form>
+        <h2 id="header"></h2>
+
+        <!--web存储-->
+        <button onclick="clickCounter()">点我</button><br>
+        <p id="pclick"></p>
+
+
+        <!--web woker-->
+        <p>计数：<strong id='result'></strong> </p>
+        <button onclick="startWorker()">开始计数</button>
+        <button onclick="stopWorker()">停止计数</button>
+        <script>
+                var a=document.getElementsByTagName('canvas')[0];
+                var ctx=a.getContext('2d');
+                ctx.fillStyle="#FF0000";
+                ctx.fillRect(10,20,150,75);
+        
+                //web存储测试
+                if(typeof(Storage)!=="undefined")        
+                {        
+                    //alert('ke');
+                    localStorage.mysitename="我的H5";
+                    document.getElementById('header').innerHTML=localStorage.mysitename;
+                }        
+                else        
+                {        
+                    alert('no!!')
+                }
+
+                function clickCounter(){
+                    if(typeof(Storage)!=="undefined")        
+                    {        
+                        if(localStorage.counter){
+                            localStorage.counter=Number(localStorage.counter)+1;
+                            document.getElementById('pclick').innerText='累计点击'+localStorage.counter+'次';
+                        }else{
+                            localStorage.counter=1;
+                        }
+                    }        
+                    else        
+                    {        
+                        alert('no!!')
+                    }
+                }
+                //web Woker
+                var w;
+                function startWorker() {
+                    if(typeof(Worker) !== "undefined") {
+                        if(typeof(w) == "undefined") {
+                            w = new Worker("worker.js");
+                        }
+                        w.onmessage = function(event) {
+                            document.getElementById("result").innerHTML = event.data;
+                        };
+                    } else {
+                        document.getElementById("result").innerHTML = "抱歉，你的浏览器不支持 Web Workers...";
+                    }
+                }
+                
+                function stopWorker() 
+                { 
+                    w.terminate();
+                    w = undefined;
+                }
+
+
+            
+                
+               
+        
+            </script>
+    </body>
+    
+</html>
